@@ -1,6 +1,6 @@
 # Angular-SailsJs-SocketIo
 
-####For Working with Angular 
+#### For Working with Angular 
 ```
 	cd web
 	npm install
@@ -8,7 +8,7 @@
 ```
 Angular is using the latest that is out right now. The socket service is listed as RdService and is only being used in the UserComponent right now for demoing and testing.
 
-####For Working with SailsJs Rest Api
+#### For Working with SailsJs Rest Api
 ```
 	cd api
 	npm install
