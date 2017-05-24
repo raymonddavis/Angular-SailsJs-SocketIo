@@ -10,7 +10,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  model = 'users';
+  MODEL_NAME = 'users';
+  SERVER_URL = 'http://localhost:3000';
   error: string = undefined;
   success: string = undefined;
   canDelete = false;
@@ -23,16 +24,16 @@ export class UserComponent implements OnInit {
   });
 
   constructor(private DB: RdService, private http: Http) {
-    this.DB.use(this.model);
+    this.DB.use(this.SERVER_URL, this.MODEL_NAME);
+
     /**
-     * You can also pass an array of what you want to watch for.
-     * So if you list post it will watch post, but if Ppostost is left out
-     * and their is an array being used then post will not be watched.
-     *
-     * By default all 'post', 'put', 'delete' are being watched
+     * SERVER_URL: required, string
+     * MODEL_NAME: required, string
+     * OPTIONS: not required, object
+     *  load: string <- The route you want to load you data from on init
      */
     /*
-    this.DB.use('users', [
+    this.DB.use('SERVER_URL, MODEL_NAME [
       'post',
       'put',
       'delete',
@@ -41,6 +42,10 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    /**
+     * By default it will load from `${this.serverUrl}/${this.model}` but you can you whatever custom route you have.
+     * Just pass the custom route into the load function as a string.
+     */
     this.users = this.DB.load();
   }
 
@@ -72,7 +77,6 @@ export class UserComponent implements OnInit {
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);
     });
-    this.clear();
   }
 
   goOffline() {
@@ -86,7 +90,6 @@ export class UserComponent implements OnInit {
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);
     });
-    this.clear();
   }
 
   post() {

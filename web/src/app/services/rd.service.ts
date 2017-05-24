@@ -8,7 +8,7 @@ const io = sails(socket);
 
 @Injectable()
 export class RdService {
-  SERVER_URL = 'http://localhost:3000';
+  serverUrl: string;
   model: string;
   options: any = {
     post: true,
@@ -19,15 +19,16 @@ export class RdService {
   public users: Observable<any[]> = Observable.of(this.data);
 
   constructor(private _http: Http, private _zone: NgZone) {
-    io.sails.url = this.SERVER_URL;
     io.sails.environment = 'production';
   }
 
-  use(model: string, options?: any) {
+  use(serverUrl: string, model: string, options?: any) {
     this.model = model;
+    this.serverUrl = serverUrl;
+    io.sails.url = this.serverUrl;
     io.socket.get(`/${this.model}/subscribe`);
 
-    if(options) {
+    if (options) {
       this.options = {
         post: options.includes('post'),
         put: options.includes('put'),
@@ -36,8 +37,8 @@ export class RdService {
     }
   }
 
-  load(): Observable<any[]> {
-    this._http.get(`${this.SERVER_URL}/${this.model}?limit=100`)
+  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+    this._http.get(url)
       .map(res => res.json().data)
       .subscribe(results => this.data.push(...results));
 
@@ -89,17 +90,17 @@ export class RdService {
   }
 
   post(entry: any) {
-    return this._http.post(`${this.SERVER_URL}/${this.model}`, entry)
+    return this._http.post(`${this.serverUrl}/${this.model}`, entry)
       .map(res => res.json());
   }
 
   put(entry: any) {
-    return this._http.put(`${this.SERVER_URL}/${this.model}/${entry.id}`, entry)
-      .map(res => res.json())
+    return this._http.put(`${this.serverUrl}/${this.model}/${entry.id}`, entry)
+      .map(res => res.json());
   }
 
   delete(id: any) {
-    return this._http.delete(`${this.SERVER_URL}/${this.model}/${id}`)
+    return this._http.delete(`${this.serverUrl}/${this.model}/${id}`)
       .map(res => res.json());
   }
 }
