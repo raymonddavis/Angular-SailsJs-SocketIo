@@ -25,6 +25,10 @@ ul>li>md-icon {
     vertical-align: bottom;
 }
 
+.timestamp {
+    float: right;
+}
+
 .green {
     color: green;
 }

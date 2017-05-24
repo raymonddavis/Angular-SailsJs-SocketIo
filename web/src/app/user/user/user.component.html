@@ -28,6 +28,7 @@
         <md-icon *ngIf="user.online" class="green">cloud_on</md-icon>
         <md-icon *ngIf="!user.online" class="red">cloud_off</md-icon>
         <strong>{{user.username}}</strong>
+        <span class="timestamp">{{ user.updatedAt | date : 'h:mma  EEEE, MMMM d, y' }}</span>
       </li>
     </ul>
   </md-card-content>

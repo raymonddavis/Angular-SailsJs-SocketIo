@@ -20,6 +20,7 @@ export class RdService {
 
   constructor(private _http: Http, private _zone: NgZone) {
     io.sails.url = this.SERVER_URL;
+    io.sails.environment = 'production';
   }
 
   use(model: string, options?: any) {
