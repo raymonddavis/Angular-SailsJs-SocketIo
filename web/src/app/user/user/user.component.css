@@ -1,0 +1,34 @@
+.center {
+    width: 500px;
+    margin: 25px;
+    margin-left: calc(50% - 250px);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul>li {
+    cursor: pointer;
+    width: 100%;
+    padding: 5px;
+
+}
+
+ul>li:hover {
+    border-bottom: 1px solid gray;
+}
+
+ul>li>md-icon {
+    margin-right: 15px;
+    vertical-align: bottom;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}

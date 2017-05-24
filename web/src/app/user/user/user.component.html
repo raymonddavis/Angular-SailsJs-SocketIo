@@ -1,1 +1,34 @@
-<li *ngFor="let user of users | async">{{user.username}}</li>
+ <md-card class="center">
+  <md-card-content>
+    <form [formGroup]="form" novalidate>
+      <md-input-container>
+        <input mdInput placeholder="Username" formControlName="username">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput type="password" placeholder="Password" formControlName="password">
+      </md-input-container>
+    </form>
+  </md-card-content>
+  <md-card-actions align="right">
+    <button md-raised-button color="accent" *ngIf="selected && selected.online" [disabled]="!canDelete" (click)="goOffline()">Set Offline</button>
+    <button md-raised-button color="accent" *ngIf="selected && !selected.online" [disabled]="!canDelete" (click)="goOnline()">Set Online</button>
+    <button md-raised-button color="accent" [disabled]="!canDelete" (click)="delete()">Delete</button>
+    <button md-raised-button color="accent" [disabled]="!form.touched && !canDelete" (click)="clear()">Clear</button>
+    <button md-raised-button color="accent" [disabled]="!form.valid" (click)="post()">Submit</button>
+  </md-card-actions>
+</md-card>
+ <md-card class="center">
+  <md-card-header>
+     <md-card-title>User</md-card-title>
+     <md-card-subtitle>A list of Users</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <ul>
+      <li *ngFor="let user of users | async" (click)="select(user)">
+        <md-icon *ngIf="user.online" class="green">cloud_on</md-icon>
+        <md-icon *ngIf="!user.online" class="red">cloud_off</md-icon>
+        <strong>{{user.username}}</strong>
+      </li>
+    </ul>
+  </md-card-content>
+</md-card>

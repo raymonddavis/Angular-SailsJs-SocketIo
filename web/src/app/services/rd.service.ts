@@ -86,4 +86,19 @@ export class RdService {
     }
     return found ? i : -1;
   }
+
+  post(entry: any) {
+    return this._http.post(`${this.SERVER_URL}/${this.model}`, entry)
+      .map(res => res.json());
+  }
+
+  put(entry: any) {
+    return this._http.put(`${this.SERVER_URL}/${this.model}/${entry.id}`, entry)
+      .map(res => res.json())
+  }
+
+  delete(id: any) {
+    return this._http.delete(`${this.SERVER_URL}/${this.model}/${id}`)
+      .map(res => res.json());
+  }
 }
