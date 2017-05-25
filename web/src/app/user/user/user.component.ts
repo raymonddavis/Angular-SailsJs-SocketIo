@@ -53,8 +53,8 @@ export class UserComponent implements OnInit {
 
   changeData() {
     if (!this.route) {
-      this.users = this.DB.load('http://localhost:3000/users?limit=5');
-      this.route = 'http://localhost:3000/users?limit=5';
+      this.users = this.DB.load('http://localhost:3000/users?where={"username":{"contains":"test"}}');
+      this.route = 'http://localhost:3000/user?where={"username":{"contains":"test"}}';
     } else {
       this.users = this.DB.load();
       this.route = '';
