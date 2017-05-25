@@ -18,6 +18,8 @@ export class UserComponent implements OnInit {
   selected: any;
   users: Observable<any[]>;
 
+  route = '';
+
   form = new FormGroup({
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
@@ -47,6 +49,16 @@ export class UserComponent implements OnInit {
      * Just pass the custom route into the load function as a string.
      */
     this.users = this.DB.load();
+  }
+
+  changeData() {
+    if (!this.route) {
+      this.users = this.DB.load('http://localhost:3000/users?limit=5');
+      this.route = 'http://localhost:3000/users?limit=5';
+    } else {
+      this.users = this.DB.load();
+      this.route = '';
+    }
   }
 
   select(entry: any) {

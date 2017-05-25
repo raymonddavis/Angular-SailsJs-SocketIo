@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { Injectable, NgZone } from '@angular/core';
@@ -38,13 +39,22 @@ export class RdService {
     }
   }
 
-  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+  length() {
+    return this.data.length;
+  }
 
-    if (!this.loaded) {
-      this._http.get(url)
-        .map(res => res.json().data)
-        .subscribe(results => this.data.push(...results));
-    }
+  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+    this._http.get(url)
+      .map(res => res.json().data)
+      .subscribe(results => {
+        if (results.length < this.data.length) {
+          this.data.splice(results.length, this.data.length);
+        }
+
+        results.forEach((element, index) => {
+          this.data[index] = element;
+        });
+      });
 
     if (this.options.post) {
       io.socket.on('post', entry => {;

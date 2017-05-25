@@ -17,10 +17,12 @@
     <button md-raised-button color="accent" [disabled]="!form.valid" (click)="post()">Submit</button>
   </md-card-actions>
 </md-card>
+<button class="center button" md-raised-button color="primary" (click)="changeData()">Change Data</button>
  <md-card class="center">
   <md-card-header>
      <md-card-title>User</md-card-title>
-     <md-card-subtitle>A list of Users</md-card-subtitle>
+     <md-card-subtitle># of users {{DB.length()}}</md-card-subtitle>
+     <md-card-subtitle>Current Route: {{route ? route : 'http://localhost:3000/users'}}</md-card-subtitle>
   </md-card-header>
   <md-card-content>
     <ul>

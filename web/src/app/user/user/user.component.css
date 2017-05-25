@@ -36,3 +36,7 @@ ul>li>md-icon {
 .red {
     color: red;
 }
+
+.button {
+    margin-left: calc(50% - 230px);
+}
