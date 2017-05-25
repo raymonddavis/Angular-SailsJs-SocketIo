@@ -43,7 +43,7 @@ export class RdService {
     return this.data.length;
   }
 
-  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+  private updateData(url: string) {
     this._http.get(url)
       .map(res => res.json().data)
       .subscribe(results => {
@@ -55,20 +55,15 @@ export class RdService {
           this.data[index] = element;
         });
       });
+  }
+
+  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+    this.updateData(url);
 
     if (this.options.post) {
       io.socket.on('post', entry => {;
         this._zone.run(() => {
-          this._http.get(url)
-            .map(res => res.json().data)
-            .subscribe(results => {
-              results.forEach(item => {
-                const index = this.getIndex(item, this.data);
-                if (index === -1) {
-                  this.data.push(item);
-                }
-              });
-            });
+          this.updateData(url);
         });
       });
     }
@@ -87,18 +82,7 @@ export class RdService {
     if (this.options.delete) {
       io.socket.on('delete', entry => {
         this._zone.run(() => {
-          entry.forEach(item => {
-            this._http.get(url)
-              .map(res => res.json().data)
-              .subscribe(results => {
-                this.data.forEach((element, index) => {
-                  const foundIndex = this.getIndex(element, results);
-                  if (foundIndex === -1) {
-                    this.data.splice(index, 1);
-                  }
-                });
-              });
-          });
+          this.updateData(url);
         });
       });
     }
