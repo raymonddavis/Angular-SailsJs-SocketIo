@@ -15,6 +15,7 @@ export class RdService {
     put: true,
     delete: true,
   };
+  loaded = false;
   data: any[] = [];
   public users: Observable<any[]> = Observable.of(this.data);
 
@@ -38,14 +39,26 @@ export class RdService {
   }
 
   load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
-    this._http.get(url)
-      .map(res => res.json().data)
-      .subscribe(results => this.data.push(...results));
+
+    if (!this.loaded) {
+      this._http.get(url)
+        .map(res => res.json().data)
+        .subscribe(results => this.data.push(...results));
+    }
 
     if (this.options.post) {
       io.socket.on('post', entry => {;
         this._zone.run(() => {
-          this.data.push(entry);
+          this._http.get(url)
+            .map(res => res.json().data)
+            .subscribe(results => {
+              results.forEach(item => {
+                const index = this.getIndex(item, this.data);
+                if (index === -1) {
+                  this.data.push(item);
+                }
+              });
+            });
         });
       });
     }
@@ -53,7 +66,7 @@ export class RdService {
     if (this.options.put) {
       io.socket.on('put', entry => {;
         this._zone.run(() => {
-          const index = this.getIndex(entry);
+          const index = this.getIndex(entry, this.data);
           if (index > -1) {
             this.data[index] = entry;
           }
@@ -65,10 +78,16 @@ export class RdService {
       io.socket.on('delete', entry => {
         this._zone.run(() => {
           entry.forEach(item => {
-            const index = this.getIndex(item);
-            if (index > -1) {
-              this.data.splice(index, 1);
-            }
+            this._http.get(url)
+              .map(res => res.json().data)
+              .subscribe(results => {
+                this.data.forEach((element, index) => {
+                  const foundIndex = this.getIndex(element, results);
+                  if (foundIndex === -1) {
+                    this.data.splice(index, 1);
+                  }
+                });
+              });
           });
         });
       });
@@ -77,11 +96,11 @@ export class RdService {
     return this.users;
   }
 
-  getIndex(entry: any) {
+  getIndex(entry: any, array: any) {
     let i;
     let found = false;
-    for (i = 0; i < this.data.length; i++) {
-      if (entry.id === this.data[i].id) {
+    for (i = 0; i < array.length; i++) {
+      if (entry.id === array[i].id) {
         found = true;
         break;
       }
