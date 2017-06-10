@@ -16,6 +16,7 @@ export class RdService {
     put: true,
     delete: true,
   };
+  loaded = false;
   data: any[] = [];
   public users: Observable<any[]> = Observable.of(this.data);
 
@@ -89,7 +90,7 @@ export class RdService {
     return this.users;
   }
 
-  private getIndex(entry: any, array: any) {
+  getIndex(entry: any, array: any) {
     let i;
     let found = false;
     for (i = 0; i < array.length; i++) {
