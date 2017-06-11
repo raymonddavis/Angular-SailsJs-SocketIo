@@ -23,12 +23,18 @@ export class UserComponent implements OnInit {
     password: new FormControl('', Validators.required),
   });
 
-  constructor(public DB: RdService, private http: Http) {
-    this.DB.use({
+  constructor(public USER: RdService, private http: Http) {
+    /**
+     * By default you need to supply url and model.
+     * Port is not required
+     * Methods is not required but needs to be an array of what methods to watch.
+     * By default all the method are true, if you supply an empty array it will turn all to false.
+     */
+    this.USER.use({
       url: 'http://localhost',
       model: 'users',
       port: 3000,
-      method: [
+      methods: [
         'post',
         'put',
         'delete'
@@ -41,15 +47,15 @@ export class UserComponent implements OnInit {
      * By default it will load from `${this.serverUrl}/${this.model}` but you can you whatever custom route you have.
      * Just pass the custom route into the load function as a string.
      */
-    this.users = this.DB.load();
+    this.users = this.USER.load();
   }
 
   changeData() {
     if (!this.route) {
-      this.users = this.DB.load('http://localhost:3000/users?limit=5');
+      this.users = this.USER.load('http://localhost:3000/users?limit=5');
       this.route = 'http://localhost:3000/users?limit=5';
     } else {
-      this.users = this.DB.load();
+      this.users = this.USER.load();
       this.route = '';
     }
   }
@@ -73,7 +79,7 @@ export class UserComponent implements OnInit {
 
   goOnline() {
     this.selected.online = true;
-    this.DB.put(this.selected).subscribe(res => {
+    this.USER.put(this.selected).subscribe(res => {
       this.success = 'Set Online!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
@@ -86,7 +92,7 @@ export class UserComponent implements OnInit {
 
   goOffline() {
     this.selected.online = false;
-    this.DB.put(this.selected).subscribe(res => {
+    this.USER.put(this.selected).subscribe(res => {
       this.success = 'Set Offline!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
@@ -99,7 +105,7 @@ export class UserComponent implements OnInit {
 
   post() {
     this.error = undefined;
-    this.DB.post(this.form.value).subscribe(res => {
+    this.USER.post(this.form.value).subscribe(res => {
       this.success = 'Posted!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
@@ -112,7 +118,7 @@ export class UserComponent implements OnInit {
   }
 
   delete() {
-    this.DB.delete(this.selected.id).subscribe(res => {
+    this.USER.delete(this.selected.id).subscribe(res => {
       this.success = 'Deleted!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {

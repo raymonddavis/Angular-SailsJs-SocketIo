@@ -21,7 +21,7 @@ export class RdService {
   };
   loaded = false;
   data: any[] = [];
-  public users: Observable<any[]> = Observable.of(this.data);
+  table: Observable<any[]> = Observable.of(this.data);
 
   constructor(private _http: Http, private _zone: NgZone) { }
 
@@ -29,7 +29,16 @@ export class RdService {
     this.url = settings.url;
     this.port = settings.port;
     this.model = settings.model;
-    this.methods = Object.assign(settings.method, this.methods);
+
+    if (settings.methods) {
+      this.methods = {
+        put: settings.methods.includes('put'),
+        post: settings.methods.includes('post'),
+        delete: settings.methods.includes('delete'),
+      }
+    }
+
+    console.log(this.methods);
 
     io.sails.url = `${this.url}${this.port ? ':' + this.port : ''}`;
     io.socket = io.sails.connect();
@@ -86,7 +95,7 @@ export class RdService {
       });
     }
 
-    return this.users;
+    return this.table;
   }
 
   getIndex(entry: any, array: any) {
