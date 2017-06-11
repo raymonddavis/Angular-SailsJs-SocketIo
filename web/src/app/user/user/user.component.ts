@@ -10,8 +10,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  MODEL_NAME = 'users';
-  SERVER_URL = 'http://localhost:3000';
   error: string = undefined;
   success: string = undefined;
   canDelete = false;
@@ -25,22 +23,17 @@ export class UserComponent implements OnInit {
     password: new FormControl('', Validators.required),
   });
 
-  constructor(private DB: RdService, private http: Http) {
-    this.DB.use(this.SERVER_URL, this.MODEL_NAME);
-
-    /**
-     * SERVER_URL: required, string
-     * MODEL_NAME: required, string
-     * OPTIONS: not required, object
-     *  load: string <- The route you want to load you data from on init
-     */
-    /*
-    this.DB.use('SERVER_URL, MODEL_NAME [
-      'post',
-      'put',
-      'delete',
-    ]);
-    */
+  constructor(public DB: RdService, private http: Http) {
+    this.DB.use({
+      url: 'http://localhost',
+      model: 'users',
+      port: 3000,
+      method: [
+        'post',
+        'put',
+        'delete'
+      ],
+    });
   }
 
   ngOnInit() {
@@ -84,7 +77,7 @@ export class UserComponent implements OnInit {
       this.success = 'Set Online!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
-      error = JSON.parse(error._body)
+      error = JSON.parse(error._body);
 
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);
@@ -97,7 +90,7 @@ export class UserComponent implements OnInit {
       this.success = 'Set Offline!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
-      error = JSON.parse(error._body)
+      error = JSON.parse(error._body);
 
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);
@@ -110,7 +103,7 @@ export class UserComponent implements OnInit {
       this.success = 'Posted!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
-      error = JSON.parse(error._body)
+      error = JSON.parse(error._body);
 
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);
@@ -123,7 +116,7 @@ export class UserComponent implements OnInit {
       this.success = 'Deleted!';
       setTimeout(() => this.success = undefined, 5000);
     }, error => {
-      error = JSON.parse(error._body)
+      error = JSON.parse(error._body);
 
       this.error = error;
       setTimeout(() => this.error = undefined, 5000);

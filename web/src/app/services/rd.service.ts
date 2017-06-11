@@ -6,12 +6,15 @@ import * as socket from 'socket.io-client';
 import * as sails from 'sails.io.js';
 
 const io = sails(socket);
+io.sails.autoConnect = false;
+io.sails.environment = 'production';
 
 @Injectable()
 export class RdService {
-  serverUrl: string;
+  url: string;
+  port: number;
   model: string;
-  options: any = {
+  methods: any = {
     post: true,
     put: true,
     delete: true,
@@ -20,23 +23,17 @@ export class RdService {
   data: any[] = [];
   public users: Observable<any[]> = Observable.of(this.data);
 
-  constructor(private _http: Http, private _zone: NgZone) {
-    io.sails.environment = 'production';
-  }
+  constructor(private _http: Http, private _zone: NgZone) { }
 
-  use(serverUrl: string, model: string, options?: any) {
-    this.model = model;
-    this.serverUrl = serverUrl;
-    io.sails.url = this.serverUrl;
+  use(settings?: any) {
+    this.url = settings.url;
+    this.port = settings.port;
+    this.model = settings.model;
+    this.methods = Object.assign(settings.method, this.methods);
+
+    io.sails.url = `${this.url}${this.port ? ':' + this.port : ''}`;
+    io.socket = io.sails.connect();
     io.socket.get(`/${this.model}/subscribe`);
-
-    if (options) {
-      this.options = {
-        post: options.includes('post'),
-        put: options.includes('put'),
-        delete: options.includes('delete')
-      };
-    }
   }
 
   length() {
@@ -57,19 +54,21 @@ export class RdService {
       });
   }
 
-  load(url = `${this.serverUrl}/${this.model}`): Observable<any[]> {
+  load(url = `${this.url}${this.port ? ':' + this.port : ''}/${this.model}`): Observable<any[]> {
     this.updateData(url);
 
-    if (this.options.post) {
-      io.socket.on('post', entry => {;
+    if (this.methods.post) {
+      io.socket.on('post', entry => {
+        ;
         this._zone.run(() => {
           this.updateData(url);
         });
       });
     }
 
-    if (this.options.put) {
-      io.socket.on('put', entry => {;
+    if (this.methods.put) {
+      io.socket.on('put', entry => {
+        ;
         this._zone.run(() => {
           const index = this.getIndex(entry, this.data);
           if (index > -1) {
@@ -79,7 +78,7 @@ export class RdService {
       });
     }
 
-    if (this.options.delete) {
+    if (this.methods.delete) {
       io.socket.on('delete', entry => {
         this._zone.run(() => {
           this.updateData(url);
@@ -103,17 +102,17 @@ export class RdService {
   }
 
   post(entry: any) {
-    return this._http.post(`${this.serverUrl}/${this.model}`, entry)
+    return this._http.post(`${this.url}${this.port ? ':' + this.port : ''}/${this.model}`, entry)
       .map(res => res.json());
   }
 
   put(entry: any) {
-    return this._http.put(`${this.serverUrl}/${this.model}/${entry.id}`, entry)
+    return this._http.put(`${this.url}${this.port ? ':' + this.port : ''}/${this.model}/${entry.id}`, entry)
       .map(res => res.json());
   }
 
   delete(id: any) {
-    return this._http.delete(`${this.serverUrl}/${this.model}/${id}`)
+    return this._http.delete(`${this.url}${this.port ? ':' + this.port : ''}/${this.model}/${id}`)
       .map(res => res.json());
   }
 }
