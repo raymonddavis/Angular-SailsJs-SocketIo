@@ -38,8 +38,6 @@ export class RdService {
       }
     }
 
-    console.log(this.methods);
-
     io.sails.url = `${this.url}${this.port ? ':' + this.port : ''}`;
     io.socket = io.sails.connect();
     io.socket.get(`/${this.model}/subscribe`);
