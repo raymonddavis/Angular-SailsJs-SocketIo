@@ -8,6 +8,7 @@ import * as sails from 'sails.io.js';
 const io = sails(socket);
 io.sails.autoConnect = false;
 io.sails.environment = 'production';
+io.sails.reconnection = true;
 
 @Injectable()
 export class RdService {
@@ -66,7 +67,6 @@ export class RdService {
 
     if (this.methods.post) {
       io.socket.on('post', entry => {
-        ;
         this._zone.run(() => {
           this.updateData(url);
         });
@@ -75,7 +75,6 @@ export class RdService {
 
     if (this.methods.put) {
       io.socket.on('put', entry => {
-        ;
         this._zone.run(() => {
           const index = this.getIndex(entry, this.data);
           if (index > -1) {

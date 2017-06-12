@@ -5,7 +5,14 @@ import { UserRoutes } from './user.routing';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MdButtonModule, MdCheckboxModule, MdCardModule, MdIconModule, MdInputModule } from '@angular/material';
+import {
+  MdButtonModule,
+  MdCheckboxModule,
+  MdCardModule,
+  MdIconModule,
+  MdInputModule,
+  MdDialogModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -17,6 +24,7 @@ import { MdButtonModule, MdCheckboxModule, MdCardModule, MdIconModule, MdInputMo
     MdIconModule,
     ReactiveFormsModule,
     MdInputModule,
+    MdDialogModule
   ],
   declarations: [UserComponent],
   providers: [RdService]

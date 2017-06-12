@@ -52,8 +52,8 @@ export class UserComponent implements OnInit {
 
   changeData() {
     if (!this.route) {
-      this.users = this.USER.load('http://localhost:3000/users?limit=5');
-      this.route = 'http://localhost:3000/users?limit=5';
+      this.users = this.USER.load('http://localhost:3000/users?limit=1');
+      this.route = 'http://localhost:3000/users?limit=1';
     } else {
       this.users = this.USER.load();
       this.route = '';

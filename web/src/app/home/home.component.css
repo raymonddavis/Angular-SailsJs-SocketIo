@@ -1,0 +1,6 @@
+.center {
+  width: 500px;
+  margin: 25px;
+  margin-left: calc(50% - 250px);
+  text-align: center;
+}

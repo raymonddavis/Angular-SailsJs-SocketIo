@@ -9,9 +9,23 @@ import 'hammerjs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import {
+  MdButtonModule,
+  MdCheckboxModule,
+  MdCardModule,
+  MdIconModule,
+  MdInputModule,
+  MdToolbarModule,
+  MaterialModule,
+  MdNativeDateModule,
+  MdTooltipModule
+} from '@angular/material';
+import { HomeComponent } from './home/home.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +33,16 @@ import { AppComponent } from './app.component';
     HttpModule,
     AppRoutingModule,
     UserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MdButtonModule,
+    MdCheckboxModule,
+    MdCardModule,
+    MdIconModule,
+    MdInputModule,
+    MdToolbarModule,
+    MaterialModule,
+    MdNativeDateModule,
+    MdTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

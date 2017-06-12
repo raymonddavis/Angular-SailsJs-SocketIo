@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<md-sidenav-container id="side-nav">
+  <md-sidenav #sidenav mode="over" id="side-nav-menu">
+    <ul>
+      <li>
+        <a md-button (click)="sidenav.toggle()" routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      </li>
+      <li>
+          <a md-button (click)="sidenav.toggle()" routerLink="/user" routerLinkActive="active">Demo</a>
+      </li>
+    </ul>
+  </md-sidenav>
+  <button md-mini-fab class="menu" (click)="sidenav.toggle()" mdTooltip="Menu" [mdTooltipPosition]="'right'">
+    <md-icon>menu</md-icon>
+  </button>
+  <router-outlet></router-outlet>
+</md-sidenav-container>
