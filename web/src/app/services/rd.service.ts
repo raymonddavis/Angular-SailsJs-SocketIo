@@ -35,7 +35,7 @@ export class RdService {
         put: settings.methods.includes('put'),
         post: settings.methods.includes('post'),
         delete: settings.methods.includes('delete'),
-      }
+      };
     }
 
     io.sails.url = `${this.url}${this.port ? ':' + this.port : ''}`;
